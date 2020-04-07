@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Allshows</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <style>
+    .space{
+      padding-right:10px;
+    }
+    .card1{
+      width:20%;
+      border:1px solid rgba(0,0,0,.125);
+      border-radius:0.25rem;
+      margin:10px;
+      margin-top:30px;
+    }
+    .img{
+      padding:3px;
+      width:100%;
+      height:250px;
+    }
+    .header{
+      padding-top:20px;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="/">Shows</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/allshows">All Shows</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/newpost">New post</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
+    <form class="form-inline my-2 my-lg-0 space" action="/results" method="POST">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <% if(!currentuser){ %>
+    <li class="nav-item space">
+      <a class="nav-link p-2" href="/signup"><i class="fas fa-user-plus"></i> Sign-up</a>
+    </li>
+    <li class="nav-item space">
+      <a class="nav-link p-2" href="/login"><i class="fas fa-sign-in-alt"></i> login</a>
+    </li>
+    <% }else{ %>
+    <li class="nav-item space">
+      <a class="nav-link p-2" href="/profile/<%= currentuser.name %>"><i class="far fa-user"></i> <%= currentuser.name %></a>
+    </li>
+    <li class="nav-item space">
+      <a class="nav-link p-2" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </li>
+      <% } %>
+  </ul>
+  </div>
+</nav>
+
+
+
+<div class="container">
+  <div class="header"><h1>All Shows</h1></div>
+  <hr>
+<div class="card-deck">
+  <% shows.forEach(function(sh){ %>
+    <div class="card1">
+      <a href="/shows/<%=sh.name%>">
+    <img class="img" src="<%=sh.img%>" alt="Card image" href="/">
+    </a>
+    </div>
+  <% }); %>
+  </div>
+</div>
+
+
+</body>
+</html>
+
+
