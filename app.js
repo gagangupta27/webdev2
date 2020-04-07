@@ -290,6 +290,6 @@ function loginmiddleware(req,res,next)
         });
         }
 }
-app.listen(process.env.PORT,process.env.IP,function(){
+app.listen(3000,function(){
     console.log("server is running");
 });
