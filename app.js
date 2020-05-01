@@ -14,7 +14,7 @@ var  app=express();
 var flag2=0;
 
 app.use(bodyParser.urlencoded({ extended: true }));
-/   app.use(expresssession({
+   app.use(expresssession({
         secret:"gagan gupta ",
         resave:false,
         saveUninitialized:false
