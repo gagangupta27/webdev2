@@ -14,7 +14,7 @@ var  app=express();
 var flag2=0;
 
 app.use(bodyParser.urlencoded({ extended: true }));
-/*    app.use(expresssession({
+  app.use(expresssession({
         secret:"gagan gupta ",
         resave:false,
         saveUninitialized:false
@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-*/
+
 app.use(function(req,res,next){
    res.locals.currentuser = req.user;
    next();
@@ -290,6 +290,6 @@ function loginmiddleware(req,res,next)
         });
         }
 }
-app.listen(process.env.PORT,process.env.IP,function(){
+app.listen(3000,function(){
     console.log("server is running");
 });
