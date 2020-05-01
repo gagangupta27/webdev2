@@ -14,7 +14,7 @@ var  app=express();
 var flag2=0;
 
 app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(expresssession({
+/   app.use(expresssession({
         secret:"gagan gupta ",
         resave:false,
         saveUninitialized:false
@@ -290,6 +290,6 @@ function loginmiddleware(req,res,next)
         });
         }
 }
-app.listen(3000,function(){
+app.listen(process.env.PORT,process.env.IP,function(){
     console.log("server is running");
 });
