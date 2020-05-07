@@ -11,6 +11,13 @@
     .space{
       padding-right:10px;
     }
+    .img{
+      height:500px;
+      border: 1px solid rgba(0,0,0,0.5);
+      border-radius: 0.25rem;
+      margin-bottom: 60px;
+
+    }
   </style>
 </head>
 <body>
@@ -57,7 +64,7 @@
 <div class="container">
     <h1><%= result.Title %></h1>
     <img class="img" src="<%=result.Poster%>" alt="Card image">
-    <p><%= result.Plot %></p>
+    <h6><p><%= result.Plot %></p></h6>
 </div>
 
 </body>
