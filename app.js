@@ -39,10 +39,13 @@ var show =mongoose.model("show",shows_schema);
 var userschema = new mongoose.Schema({
     name:String,
     username:String,
-    password:String
+    password:String,
+    history:[String],
+    date:[String]
 });
 userschema.plugin(passportlocalmongoose);
 var user =mongoose.model("user",userschema);
+
 passport.use(new passportlocal(user.authenticate()));
 passport.serializeUser(user.serializeUser());
 passport.deserializeUser(user.deserializeUser());
@@ -50,15 +53,23 @@ passport.deserializeUser(user.deserializeUser());
 
 //======================================================================================================================
 //      routes
-//==================================================================================================================
+//======================================================================================================================
+
+
+
 
 app.post("/results",function(req,res){
     request("http://www.omdbapi.com/?apikey=56424262&s="+req.body.search,function(error,response,body){
         if(!error && response.statusCode==200){
             var result = JSON.parse(body);
-            res.render("results.ejs",{result:result["Search"]});
+            if(result["Search"]){
+                res.render("results.ejs",{result:result["Search"]});
+            }else{
+                res.redirect("/");
+            }
             
         }
+        
     });
 });
 
@@ -76,7 +87,7 @@ app.post("/newpost",isloggedin,function(req,res){
 app.get("/newpost",isloggedin,function(req,res){
    res.render("new.ejs"); 
 });
-app.get("/allshows",function(req,res){
+app.get("/allshows",isloggedin,function(req,res){
           show.find({},function(err,shows){
             if(err){
                 console.log(err);
@@ -98,27 +109,43 @@ app.get("/login",function(req,res){
    flag2=0;
 });
 
-app.post("/login",passport.authenticate("local",{successRedirect:"/",failureRedirect:"/login"}),function(req,res){
+app.get("/adminlogin",function(req,res){
+    res.render("adminlogin.ejs");
 });
 
+app.post("/admin",function(req,res){
+    if(req.body.username=="gupta.gag27@gmail.com" && req.body.password == "qwerty"){
 
+        user.find({},function(err,users){  
+            res.render("admin.ejs",{users:users});
+        }); 
+    }
+    else{
+        res.render("adminlogin.ejs")
+    }
+});
+
+app.post("/admin/:username/watchhistory",function(req,res){
+    user.findOne({username:req.params.username},function(err,user1){
+        res.render("adminwatchhistory.ejs",{username:user1});
+    });
+});
+
+app.post("/login",passport.authenticate("local",{successRedirect:"/",failureRedirect:"/login"}),function(req,res){
+});
 
 app.get("/forgotpassword",function(req,res){
     var errors=[];
     if(flag2 == 2 ){ 
         //<h2>Invalid 4 Digit Code !!</h2>
         errors.push({ msg: 'Invalid 4 Digit Code' });
-
-    
     }
     res.render("forgotpassword.ejs",{errors:errors});
     flag2=0;
 });
 
 app.get("/forgotpassword/:username/:code",function(req,res){
-
     res.render("resetpassword.ejs",{username:req.params.username,code:req.params.code})
-
 });
 
 
@@ -130,11 +157,9 @@ app.post("/forgotpassword/:username/:code",function(req,res){
             user1.setPassword(req.body.password, function(err, user2){ 
                 user2.save();
             });
-    
         });
         flag2=1;
         res.redirect("/login");
-      
     }
     else{
         flag2=2;
@@ -162,7 +187,6 @@ app.post("/forgotpassword",function(req,res){
           if(err || !users){
             errors.push({ msg: 'Invalid Email ID' });
             res.render("forgotpassword.ejs",{errors:errors});  
-
           }
           else{
             user.findOne({username:req.body.username},function(err,users){
@@ -183,10 +207,7 @@ app.post("/forgotpassword",function(req,res){
 
             }
       });
-   
 });
-
-
 
 app.get("/signup",function(req,res){
    res.render("signup.ejs"); 
@@ -216,7 +237,7 @@ app.post("/signup",function(req,res){
       username:req.body.username,
       password:req.body.password,
       password2:req.body.password2
-                            });
+    });
   } else 
     {
     user.findOne({ username: req.body.username },function(err,users){
@@ -246,7 +267,6 @@ app.post("/signup",function(req,res){
    });
     }
     });
-    
 }
 });
 
@@ -265,10 +285,31 @@ app.get("/shows/:id",function(req,res){
         if(!error && response.statusCode==200){
             var result = JSON.parse(body);
             res.render("shows.ejs",{result:result});
-            console.log(result);
-        }
+        } 
     });
 });
+
+app.post("/shows/:id/watch",isloggedin,function(req,res){
+    
+    request("http://www.omdbapi.com/?apikey=56424262&i="+req.params.id,function(error,response,body){
+        if(!error && response.statusCode==200){
+            var result = JSON.parse(body);
+            res.render("shows.ejs",{result:result});
+
+                user.findOne({username:req.user.username},function(err,user1){
+                    user1.history.push(result.Title);
+                    //var date1 =new Date();
+                    var today = new Date();
+                    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+                    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                    var dateTime = date+' '+time;
+                    user1.date.push(dateTime);
+                    user1.save();
+                });
+        } 
+    });
+});
+
 
 
 function isloggedin(req,res,next){
@@ -290,7 +331,7 @@ function loginmiddleware(req,res,next)
         });
         }
 }
-app.listen(process.env.PORT,process.env.IP,function(){
+app.listen(3000,function(){
     console.log("server is running");
 });
 

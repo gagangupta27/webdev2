@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>shows</title>
+  <title>Allshows</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -11,8 +11,28 @@
     .space{
       padding-right:10px;
     }
+    .card1{
+      width:20%;
+      border:1px solid rgba(0,0,0,.125);
+      border-radius:0.25rem;
+      margin:10px;
+      margin-top:30px;
+    }
+    .img{
+      padding:3px;
+      width:100%;
+      height:250px;
+    }
+    .header{
+      padding-top:20px;
+    }
+    .space3{
+      margin-top:20px;
+    }
     body{
       background-color: #0f171e;
+      color: white;
+
     }
   </style>
 </head>
@@ -24,43 +44,62 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="/allshows">Watch history</a>
-      </li>
-    </ul>
+
     <ul class="navbar-nav flex-row ml-md-auto d-none d-md-flex">
-    <form class="form-inline my-2 my-lg-0 space" action="/results" method="POST" >
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
-    <% if(!currentuser){ %>
-    <li class="nav-item space">
-      <a class="nav-link p-2" href="/signup"><i class="fas fa-user-plus"></i> Sign-up</a>
-    </li>
-    <li class="nav-item space">
-      <a class="nav-link p-2" href="/login"><i class="fas fa-sign-in-alt"></i> login</a>
-    </li>
-    <% }else{ %>
-    <li class="nav-item space">
-      <a class="nav-link p-2" href="/profile/<%= currentuser.name %>"><i class="far fa-user"></i> <%= currentuser.name %></a>
-    </li>
+
     <li class="nav-item space">
       <a class="nav-link p-2" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </li>
-      <% } %>
+    
   </ul>
   </div>
 </nav>
-<hr>
+
+
+
 <div class="container">
-  <div class="jumbotron">
-  <h1>Movies!!!</h1>
-  <p><h4>A 2CC Project</h4></p>
+  <div class="header"><h1>Watch History</h1></div>
+  <hr>
+  <div class="row">
+    <div class="col-sm">
+    <ul style="list-style-type:none;">
+        <% var i=0; 
+        for ( i = username.date.length;i>=0; i--) { %>
+          <li class="space3">
+            <h6><%=username.date[i] %></h6>
+          </li>
+
+        <% } %>
+
+
+    </ul>
+    </div>
+    <div class="col-sm">
+      <ul style="list-style-type:none;">
+        <% var i=0; 
+          for ( i = username.history.length;i>=0; i--) { %>
+            <li class="space3">
+              <h6><%=username.history[i] %></h6>
+            </li>
+
+          <% } %>
+      </ul>
+      
+    </div>
+    <div class="col-sm">
+
+    </div>
   </div>
 </div>
 
+
 </body>
 </html>
+
+
+
+
+
+
 
 
