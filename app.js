@@ -79,23 +79,8 @@ app.get("/",function(req,res){
     res.render("index.ejs");
 });
 
-app.post("/newpost",isloggedin,function(req,res){
-    show.create(req.body.sh);
-        res.redirect("/");
-   
-});
-app.get("/newpost",isloggedin,function(req,res){
-   res.render("new.ejs"); 
-});
-app.get("/allshows",isloggedin,function(req,res){
-          show.find({},function(err,shows){
-            if(err){
-                console.log(err);
-            }
-            else{
-                res.render("allshows.ejs",{shows:shows});
-            }
-        });
+app.get("/watchhistory",isloggedin,function(req,res){
+        res.render("watchhistory.ejs");
 });
 
 app.get("/login",function(req,res){
@@ -331,7 +316,7 @@ function loginmiddleware(req,res,next)
         });
         }
 }
-app.listen(3000,function(){
+app.listen(process.env.PORT,process.env.IP,function(){
     console.log("server is running");
 });
 
